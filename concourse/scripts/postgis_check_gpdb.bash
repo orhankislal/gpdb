@@ -50,8 +50,8 @@ function setup_gpadmin_user() {
 function setup_postgis() {
 
 	pushd /tmp/
-	wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-	sudo yum install epel-release-latest-7.noarch.rpm
+	# wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+	# sudo yum install epel-release-latest-7.noarch.rpm
 	wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
 	sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
 	sudo yum install -y geos-devel
