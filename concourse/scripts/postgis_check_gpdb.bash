@@ -31,6 +31,7 @@ function gen_env(){
 		base_path=\${1}
 		source /usr/local/greenplum-db-devel/greenplum_path.sh
 		source /opt/gcc_env.sh
+		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 
 
 		# cd \${base_path}/gpdb_src/gpMgmt/bin
@@ -38,6 +39,20 @@ function gen_env(){
 		# show results into concourse
 		# cat \${base_path}/gpdb_src/gpMgmt/gpMgmt_testunit_results.log
 
+	EOF
+
+	chmod a+x /opt/run_test.sh
+}
+
+function setup_gpadmin_user() {
+    ./gpdb_src/concourse/scripts/setup_gpadmin_user.bash "$TEST_OS"
+}
+
+function setup_postgis() {
+ 	cat > /opt/install_postgis.sh <<-EOF
+		base_path=\${1}
+		source /usr/local/greenplum-db-devel/greenplum_path.sh
+		source /opt/gcc_env.sh
 		cd /tmp/
 		wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
 		sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
@@ -54,6 +69,7 @@ function gen_env(){
 		./configure --enable-btyacc
 		make
 		sudo make install
+
 		cd ${base_path}/postgis_src/geospatial/postgis
 		make remove
 		make prepare
@@ -62,38 +78,9 @@ function gen_env(){
 		make
 		sudo make install
 		make check
-
-		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 	EOF
 
-	chmod a+x /opt/run_test.sh
-}
-
-function setup_gpadmin_user() {
-    ./gpdb_src/concourse/scripts/setup_gpadmin_user.bash "$TEST_OS"
-}
-
-function setup_postgis() {
-
-	pushd /tmp/
-	wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
-	sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
-	sudo yum install -y geos-devel
-	sudo yum install -y proj-devel
-	sudo yum install -y gdal-devel
-	sudo yum install -y expat-devel
-	sudo yum install -y patch
-	sudo yum install -y CUnit CUnit-devel
-	sudo yum install libxml2-devel -y
-	wget ftp://invisible-island.net/byacc/byacc-20170430.tgz
-	tar -xzf byacc-20170430.tgz
-	pushd byacc-20170430/
-	./configure --enable-btyacc
-	make
-	sudo make install
-	popd
-	pushd ${base_path}
-
+	chmod a+x /opt/install_postgis.sh
 }
 
 function _main() {
@@ -103,8 +90,8 @@ function _main() {
     setup_gpadmin_user
     make_cluster
     gen_env
+    setup_postgis
     run_test
-    #setup_postgis
 }
 
 _main "$@"
