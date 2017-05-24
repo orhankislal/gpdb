@@ -32,8 +32,10 @@ function gen_env(){
 		source /usr/local/greenplum-db-devel/greenplum_path.sh
 		source /opt/gcc_env.sh
 		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
-		cd \${base_path}/gpdb_src/gpMgmt/bin
-		make check
+
+
+		# cd \${base_path}/gpdb_src/gpMgmt/bin
+		# make check
 		# show results into concourse
 		cat \${base_path}/gpdb_src/gpMgmt/gpMgmt_testunit_results.log
 	EOF
@@ -45,6 +47,12 @@ function setup_gpadmin_user() {
     ./gpdb_src/concourse/scripts/setup_gpadmin_user.bash "$TEST_OS"
 }
 
+function setup_postgis() {
+
+	pushd /tmp/
+	wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+}
+
 function _main() {
 
     configure
@@ -53,6 +61,7 @@ function _main() {
     make_cluster
     gen_env
     run_test
+    setup_postgis
 }
 
 _main "$@"
