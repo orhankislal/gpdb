@@ -37,7 +37,7 @@ function gen_env(){
 		# cd \${base_path}/gpdb_src/gpMgmt/bin
 		# make check
 		# show results into concourse
-		cat \${base_path}/gpdb_src/gpMgmt/gpMgmt_testunit_results.log
+		# cat \${base_path}/gpdb_src/gpMgmt/gpMgmt_testunit_results.log
 	EOF
 
 	chmod a+x /opt/run_test.sh
