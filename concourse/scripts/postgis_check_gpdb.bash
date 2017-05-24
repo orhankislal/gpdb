@@ -41,27 +41,27 @@ function gen_env(){
 
 		cd /tmp/
 		wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
-		sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
-		sudo yum install -y geos-devel
-		sudo yum install -y proj-devel
-		sudo yum install -y gdal-devel
-		sudo yum install -y expat-devel
-		sudo yum install -y patch
-		sudo yum install -y CUnit CUnit-devel
-		sudo yum install libxml2-devel -y
+		yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
+		yum install -y geos-devel
+		yum install -y proj-devel
+		yum install -y gdal-devel
+		yum install -y expat-devel
+		yum install -y patch
+		yum install -y CUnit CUnit-devel
+		yum install libxml2-devel -y
 		wget ftp://invisible-island.net/byacc/byacc-20170430.tgz
 		tar -xzf byacc-20170430.tgz
 		cd byacc-20170430/
 		./configure --enable-btyacc
 		make
-		sudo make install
+		make install
 		cd ${base_path}/postgis_src/geospatial/postgis
 		make remove
 		make prepare
 		cd build/postgis-2.1.5/
 		./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME
 		make
-		sudo make install
+		make install
 		make check
 	EOF
 
