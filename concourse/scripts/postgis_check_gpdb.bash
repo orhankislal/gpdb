@@ -31,7 +31,6 @@ function gen_env(){
 		base_path=\${1}
 		source /usr/local/greenplum-db-devel/greenplum_path.sh
 		source /opt/gcc_env.sh
-		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 
 
 		# cd \${base_path}/gpdb_src/gpMgmt/bin
@@ -41,28 +40,30 @@ function gen_env(){
 
 		cd /tmp/
 		wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
-		yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
-		yum install -y geos-devel
-		yum install -y proj-devel
-		yum install -y gdal-devel
-		yum install -y expat-devel
-		yum install -y patch
-		yum install -y CUnit CUnit-devel
-		yum install libxml2-devel -y
+		sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
+		sudo yum install -y geos-devel
+		sudo yum install -y proj-devel
+		sudo yum install -y gdal-devel
+		sudo yum install -y expat-devel
+		sudo yum install -y patch
+		sudo yum install -y CUnit CUnit-devel
+		sudo yum install libxml2-devel -y
 		wget ftp://invisible-island.net/byacc/byacc-20170430.tgz
 		tar -xzf byacc-20170430.tgz
 		cd byacc-20170430/
 		./configure --enable-btyacc
 		make
-		make install
+		sudo make install
 		cd ${base_path}/postgis_src/geospatial/postgis
 		make remove
 		make prepare
 		cd build/postgis-2.1.5/
 		./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME
 		make
-		make install
+		sudo make install
 		make check
+
+		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 	EOF
 
 	chmod a+x /opt/run_test.sh
