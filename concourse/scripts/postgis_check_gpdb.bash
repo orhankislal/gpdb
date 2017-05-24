@@ -38,6 +38,31 @@ function gen_env(){
 		# make check
 		# show results into concourse
 		# cat \${base_path}/gpdb_src/gpMgmt/gpMgmt_testunit_results.log
+
+		cd /tmp/
+		wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
+		sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
+		sudo yum install -y geos-devel
+		sudo yum install -y proj-devel
+		sudo yum install -y gdal-devel
+		sudo yum install -y expat-devel
+		sudo yum install -y patch
+		sudo yum install -y CUnit CUnit-devel
+		sudo yum install libxml2-devel -y
+		wget ftp://invisible-island.net/byacc/byacc-20170430.tgz
+		tar -xzf byacc-20170430.tgz
+		cd byacc-20170430/
+		./configure --enable-btyacc
+		make
+		sudo make install
+		cd ${base_path}/postgis_src/geospatial/postgis
+		make remove
+		make prepare
+		cd build/postgis-2.1.5/
+		./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME
+		make
+		sudo make install
+		make check
 	EOF
 
 	chmod a+x /opt/run_test.sh
@@ -50,8 +75,6 @@ function setup_gpadmin_user() {
 function setup_postgis() {
 
 	pushd /tmp/
-	# wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-	# sudo yum install epel-release-latest-7.noarch.rpm
 	wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
 	sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
 	sudo yum install -y geos-devel
@@ -62,12 +85,13 @@ function setup_postgis() {
 	sudo yum install -y CUnit CUnit-devel
 	sudo yum install libxml2-devel -y
 	wget ftp://invisible-island.net/byacc/byacc-20170430.tgz
-	tar -xzf byacc.tar.gz
+	tar -xzf byacc-20170430.tgz
 	pushd byacc-20170430/
 	./configure --enable-btyacc
 	make
 	sudo make install
 	popd
+	pushd ${base_path}
 
 }
 
@@ -79,7 +103,7 @@ function _main() {
     make_cluster
     gen_env
     run_test
-    setup_postgis
+    #setup_postgis
 }
 
 _main "$@"
