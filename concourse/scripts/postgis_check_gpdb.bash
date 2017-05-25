@@ -78,6 +78,15 @@ function setup_postgis() {
 		make
 		sudo make install
 		make check
+
+
+		cd $GPHOME/share/postgresql/contrib/postgis-2.1
+		psql template1 -f postgis.sql
+		psql template1 -f postgis_comments.sql
+		psql template1 -f spatial_ref_sys.sql
+		psql template1 -f rtpostgis.sql
+		psql template1 -f raster_comments.sql
+
 	EOF
 
 	chmod a+x /opt/install_postgis.sh
