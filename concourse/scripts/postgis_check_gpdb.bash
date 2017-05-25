@@ -69,6 +69,7 @@ function setup_postgis() {
 		./configure --enable-btyacc
 		make
 		sudo make install
+		export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
 		cd \${base_path}/postgis_src/postgis
 		make remove
