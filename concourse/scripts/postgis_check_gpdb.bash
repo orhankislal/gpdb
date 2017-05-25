@@ -70,7 +70,7 @@ function setup_postgis() {
 		make
 		sudo make install
 
-		cd ${base_path}/postgis_src/geospatial/postgis
+		cd \${base_path}/postgis_src/geospatial/postgis
 		make remove
 		make prepare
 		cd build/postgis-2.1.5/
