@@ -75,7 +75,7 @@ function setup_postgis() {
 		make remove
 		make prepare
 		cd build/postgis-2.1.5/
-		./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME
+		./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME --libdir=/usr/lib64
 		make
 		sudo make install
 		make check
