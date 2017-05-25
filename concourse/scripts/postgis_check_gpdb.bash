@@ -54,7 +54,7 @@ base_path=\${1}
 source /usr/local/greenplum-db-devel/greenplum_path.sh
 source /opt/gcc_env.sh
 source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
-export MASTER_DATA_DIRECTORY=\${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
+# export MASTER_DATA_DIRECTORY=\${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
 
 cd /tmp/
 wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
@@ -74,13 +74,18 @@ make
 sudo make install
 export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
-cd \${base_path}/postgis_src/postgis
+cd \${base_path}/postgis_src/postgis/
 make remove
 make prepare
 cd build/postgis-2.1.5/
 ./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME --libdir=/usr/lib64
 make
 sudo make install
+su - gpadmin
+source /usr/local/greenplum-db-devel/greenplum_path.sh
+source /opt/gcc_env.sh
+source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
+cd \${base_path}/postgis_src/postgis/build/postgis-2.1.5/
 make check
 
 gpstate -a
