@@ -49,7 +49,7 @@ function setup_gpadmin_user() {
 }
 
 function setup_postgis() {
- 	cat > /opt/install_postgis.sh <<-EOF
+ 	cat > /opt/setup_postgis.sh <<-EOF
 base_path=\${1}
 source /usr/local/greenplum-db-devel/greenplum_path.sh
 source /opt/gcc_env.sh
@@ -74,7 +74,10 @@ make
 sudo make install
 export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
-su - gpadmin
+	EOF
+
+	cat > /opt/install_postgis.sh <<-EOF
+base_path=\${1}
 source /usr/local/greenplum-db-devel/greenplum_path.sh
 source /opt/gcc_env.sh
 source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
@@ -101,6 +104,7 @@ psql template1 -f raster_comments.sql
 
 	EOF
 
+	chmod a+x /opt/setup_postgis.sh
 	chmod a+x /opt/install_postgis.sh
 }
 
