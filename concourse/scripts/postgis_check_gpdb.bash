@@ -74,6 +74,7 @@ make
 sudo make install
 export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
+chown -R gpadmin:gpadmin \${base_path}/postgis_src
 	EOF
 
 	cat > /opt/install_postgis.sh <<-EOF
