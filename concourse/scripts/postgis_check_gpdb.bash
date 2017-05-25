@@ -50,43 +50,47 @@ function setup_gpadmin_user() {
 
 function setup_postgis() {
  	cat > /opt/install_postgis.sh <<-EOF
-		base_path=\${1}
-		source /usr/local/greenplum-db-devel/greenplum_path.sh
-		source /opt/gcc_env.sh
-		cd /tmp/
-		wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
-		sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
-		# sudo yum install -y libxml2-devel
-		sudo yum install -y geos-devel
-		sudo yum install -y proj-devel
-		sudo yum install -y gdal-devel
-		sudo yum install -y expat-devel
-		sudo yum install -y patch
-		sudo yum install -y CUnit CUnit-devel
-		wget ftp://invisible-island.net/byacc/byacc-20170430.tgz
-		tar -xzf byacc-20170430.tgz
-		cd byacc-20170430/
-		./configure --enable-btyacc
-		make
-		sudo make install
-		export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
+base_path=\${1}
+source /usr/local/greenplum-db-devel/greenplum_path.sh
+source /opt/gcc_env.sh
+source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
+export MASTER_DATA_DIRECTORY=\${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
 
-		cd \${base_path}/postgis_src/postgis
-		make remove
-		make prepare
-		cd build/postgis-2.1.5/
-		./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME --libdir=/usr/lib64
-		make
-		sudo make install
-		make check
+cd /tmp/
+wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
+sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
+# sudo yum install -y libxml2-devel
+sudo yum install -y geos-devel
+sudo yum install -y proj-devel
+sudo yum install -y gdal-devel
+sudo yum install -y expat-devel
+sudo yum install -y patch
+sudo yum install -y CUnit CUnit-devel
+wget ftp://invisible-island.net/byacc/byacc-20170430.tgz
+tar -xzf byacc-20170430.tgz
+cd byacc-20170430/
+./configure --enable-btyacc
+make
+sudo make install
+export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
+cd \${base_path}/postgis_src/postgis
+make remove
+make prepare
+cd build/postgis-2.1.5/
+./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME --libdir=/usr/lib64
+make
+sudo make install
+make check
 
-		cd $GPHOME/share/postgresql/contrib/postgis-2.1
-		psql template1 -f postgis.sql
-		psql template1 -f postgis_comments.sql
-		psql template1 -f spatial_ref_sys.sql
-		psql template1 -f rtpostgis.sql
-		psql template1 -f raster_comments.sql
+gpstate -a
+
+cd $GPHOME/share/postgresql/contrib/postgis-2.1
+psql template1 -f postgis.sql
+psql template1 -f postgis_comments.sql
+psql template1 -f spatial_ref_sys.sql
+psql template1 -f rtpostgis.sql
+psql template1 -f raster_comments.sql
 
 	EOF
 
