@@ -33,14 +33,16 @@ function compile_gpdb(){
 	echo HERE1
 	source /tmp/gpdb-deploy/greenplum_path.sh
 	which psql
-	mkdir /tmp/gpdb-data
-	export GPDATA=/tmp/gpdb-data
-	export MASTER_DATA_DIRECTORY=$GPDATA/master/gpseg-1
-	mkdir -p $GPDATA/master
-	mkdir -p $GPDATA/p0/primary
-	hostname > $GPDATA/hosts
+	sudo mkdir /tmp/gpdb-data
+	sudo export GPDATA=/tmp/gpdb-data
+	sudo export MASTER_DATA_DIRECTORY=$GPDATA/master/gpseg-1
+	pwd
+	sudo mkdir -p $GPDATA/master
+	sudo mkdir -p $GPDATA/p0/primary
+	sudo hostname > $GPDATA/hosts
 
 	echo HERE2
+	echo $GPDATA
 	ls $GPDATA
 	# gpssh-exkeys -f $GPDATA/hosts
 	HN=$HOSTNAME
