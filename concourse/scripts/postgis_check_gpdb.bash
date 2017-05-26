@@ -177,6 +177,10 @@ psql template1 -f raster_comments.sql
 function init_db(){
 
 	cat > /opt/init_db.sh <<-EOF
+	source /usr/local/greenplum-db-devel/greenplum_path.sh
+	source /opt/gcc_env.sh
+	export GPDATA=/tmp/gpdb-data
+	export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
 	gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
 	gpstart -a
 	EOF
