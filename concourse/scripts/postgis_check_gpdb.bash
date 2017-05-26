@@ -30,15 +30,19 @@ function compile_gpdb(){
 	./configure --with-openssl --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --disable-orca
 	make
 	sudo make install
-
+	echo HERE1
 	source /tmp/gpdb-deploy/greenplum_path.sh
+	which psql
 	mkdir /tmp/gpdb-data
 	export GPDATA=/tmp/gpdb-data
 	export MASTER_DATA_DIRECTORY=$GPDATA/master/gpseg-1
 	mkdir -p $GPDATA/master
 	mkdir -p $GPDATA/p0/primary
 	hostname > $GPDATA/hosts
-	gpssh-exkeys -f $GPDATA/hosts
+
+	echo HERE2
+	ls $GPDATA
+	# gpssh-exkeys -f $GPDATA/hosts
 	HN=$HOSTNAME
  	cp $GPHOME/docs/cli_help/gpconfigs/gpinitsystem_config  $GPDATA
 
@@ -48,7 +52,7 @@ function compile_gpdb(){
     -e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=$GPDATA/hosts"
     --in-place=.orig $GPDATA/gpinitsystem_config
 
-    gpinitsystem -c $GPDATA/gpinitsystem_config
+    su gpadmin gpinitsystem -c $GPDATA/gpinitsystem_config
     gpstart -a
 
 	EOF
