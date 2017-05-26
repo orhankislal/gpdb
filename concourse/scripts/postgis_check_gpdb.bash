@@ -32,13 +32,13 @@ cd \${base_path}/gpdb_src
 make
 sudo make install
 echo HERE1
-more greenplum_path.sh
+more /tmp/gpdb-deploy/greenplum_path.sh
 source /tmp/gpdb-deploy/greenplum_path.sh
 which psql
 sudo mkdir /tmp/gpdb-data
 # export GPDATA=/tmp/gpdb-data
 export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
-echo $MASTER_DATA_DIRECTORY
+echo \$MASTER_DATA_DIRECTORY
 pwd
 sudo mkdir -p /tmp/gpdb-data/master
 sudo mkdir -p /tmp/gpdb-data/p0/primary
@@ -54,9 +54,10 @@ cp /tmp/gpdb-deploy/docs/cli_help/gpconfigs/gpinitsystem_config  /tmp/gpdb-data
 sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=${HN}" \
 -e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=(/tmp/gpdb-data/p0/primary)" \
 -e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=/tmp/gpdb-data/master" \
--e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts"
+-e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts" \
 --in-place=.orig /tmp/gpdb-data/gpinitsystem_config
 
+echo HERE3
 su gpadmin gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
 gpstart -a
 
