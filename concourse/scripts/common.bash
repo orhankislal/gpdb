@@ -47,6 +47,7 @@ workaround_before_concourse_stops_stripping_suid_bits() {
 function run_test() {
   ln -s "$(pwd)/gpdb_src/gpAux/ext/rhel6_x86_64/python-2.7.12" /opt
   su - root -c "bash /opt/compile_gpdb.sh $(pwd)"
+  su - gpadmin -c "bash /opt/init_db.sh $(pwd)"
   # su - gpadmin -c "bash /opt/run_test.sh $(pwd)"
   # su - root -c "bash /opt/setup_postgis.sh $(pwd)"
   # su - gpadmin -c "bash /opt/install_postgis.sh $(pwd)"

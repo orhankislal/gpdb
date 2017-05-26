@@ -58,8 +58,6 @@ sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=${HN}" \
 --in-place=.orig /tmp/gpdb-data/gpinitsystem_config
 
 echo HERE3
-su gpadmin gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
-gpstart -a
 
 	EOF
 
@@ -176,13 +174,24 @@ psql template1 -f raster_comments.sql
 	chmod a+x /opt/install_postgis.sh
 }
 
+function init_db(){
+
+	cat > /opt/init_db.sh <<-EOF
+	gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
+	gpstart -a
+	EOF
+
+	chmod a+x /opt/init_db.sh
+}
+
 function _main() {
 
 	compile_gpdb
 
     # configure
     # install_gpdb
-    # setup_gpadmin_user
+    setup_gpadmin_user
+    init_db
     # make_cluster
     # gen_env
     # setup_postgis
