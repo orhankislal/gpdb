@@ -19,6 +19,7 @@ function install_gpdb() {
 }
 
 function configure() {
+  sudo yum install -y libxml2-devel
   source /opt/gcc_env.sh
   export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
   pushd gpdb_src
