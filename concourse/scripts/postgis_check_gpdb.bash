@@ -34,27 +34,28 @@ function compile_gpdb(){
 	source /tmp/gpdb-deploy/greenplum_path.sh
 	which psql
 	sudo mkdir /tmp/gpdb-data
-	sudo export GPDATA=/tmp/gpdb-data
-	sudo export MASTER_DATA_DIRECTORY=$GPDATA/master/gpseg-1
+	# export GPDATA=/tmp/gpdb-data
+	export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
+	echo $MASTER_DATA_DIRECTORY
 	pwd
-	sudo mkdir -p $GPDATA/master
-	sudo mkdir -p $GPDATA/p0/primary
-	sudo hostname > $GPDATA/hosts
+	sudo mkdir -p /tmp/gpdb-data/master
+	sudo mkdir -p /tmp/gpdb-data/p0/primary
+	sudo hostname > /tmp/gpdb-data/hosts
 
 	echo HERE2
-	echo $GPDATA
-	ls $GPDATA
-	# gpssh-exkeys -f $GPDATA/hosts
+	echo /tmp/gpdb-data
+	ls /tmp/gpdb-data
+	# gpssh-exkeys -f /tmp/gpdb-data/hosts
 	HN=$HOSTNAME
- 	cp $GPHOME/docs/cli_help/gpconfigs/gpinitsystem_config  $GPDATA
+ 	cp $GPHOME/docs/cli_help/gpconfigs/gpinitsystem_config  /tmp/gpdb-data
 
  	sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=${HN}" \
-    -e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=($GPDATA/p0/primary)" \
-    -e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=$GPDATA/master" \
-    -e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=$GPDATA/hosts"
-    --in-place=.orig $GPDATA/gpinitsystem_config
+    -e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=(/tmp/gpdb-data/p0/primary)" \
+    -e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=/tmp/gpdb-data/master" \
+    -e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts"
+    --in-place=.orig /tmp/gpdb-data/gpinitsystem_config
 
-    su gpadmin gpinitsystem -c $GPDATA/gpinitsystem_config
+    su gpadmin gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
     gpstart -a
 
 	EOF
