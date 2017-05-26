@@ -64,7 +64,7 @@ sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
 # sudo yum install -y libxml2-devel
 sudo yum install -y geos-devel
 sudo yum install -y proj-devel
-sudo yum install -y gdal-devel
+# sudo yum install -y gdal-devel
 sudo yum install -y expat-devel
 sudo yum install -y patch
 sudo yum install -y CUnit CUnit-devel
