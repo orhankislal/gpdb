@@ -20,6 +20,7 @@ function install_gpdb() {
 
 function configure() {
   source /opt/gcc_env.sh
+  export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
   pushd gpdb_src
       # The full set of configure options which were used for building the
       # tree must be used here as well since the toplevel Makefile depends
@@ -35,6 +36,7 @@ function make_cluster() {
   # require max_connections of at least 129.
   export DEFAULT_QD_MAX_CONNECT=150
   workaround_before_concourse_stops_stripping_suid_bits
+  export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
   pushd gpdb_src/gpAux/gpdemo
       su gpadmin -c make cluster
   popd

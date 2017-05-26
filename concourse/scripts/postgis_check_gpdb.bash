@@ -53,9 +53,9 @@ function setup_gpadmin_user() {
 function setup_postgis() {
  	cat > /opt/setup_postgis.sh <<-EOF
 base_path=\${1}
-# source /usr/local/greenplum-db-devel/greenplum_path.sh
-# source /opt/gcc_env.sh
-# source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
+source /usr/local/greenplum-db-devel/greenplum_path.sh
+source /opt/gcc_env.sh
+source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 # export MASTER_DATA_DIRECTORY=\${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
 
 cd /tmp/
@@ -85,6 +85,7 @@ source /usr/local/greenplum-db-devel/greenplum_path.sh
 source /opt/gcc_env.sh
 source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 cd \${base_path}/postgis_src/postgis/build/postgis-2.1.5/
+export TEMP1 = $LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
 cd \${base_path}/postgis_src/postgis/
@@ -94,6 +95,8 @@ cd build/postgis-2.1.5/
 ./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME --libdir=/usr/lib64
 make
 make install
+
+export LD_LIBRARY_PATH=$TEMP1
 make check
 
 gpstate -a
