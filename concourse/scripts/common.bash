@@ -48,6 +48,6 @@ function run_test() {
   ln -s "$(pwd)/gpdb_src/gpAux/ext/rhel6_x86_64/python-2.7.12" /opt
   su - gpadmin -c "bash /opt/run_test.sh $(pwd)"
   su - root -c "bash /opt/setup_postgis.sh $(pwd)"
-  su - gpadmin -c "bash /opt/install_postgis.sh $(pwd)"
+  # su - gpadmin -c "bash /opt/install_postgis.sh $(pwd)"
 
 }
