@@ -9,54 +9,56 @@ function compile_gpdb(){
 
   cat > /opt/compile_gpdb.sh <<-EOF
 
-  	base_path=\${1}
-  	source /opt/gcc_env.sh
-	cd /tmp/
-	sudo yum -y install git gcc readline-devel zlib-devel libcurl-devel bzip2-devel bison flex gcc-c++ python-devel openssl-devel libffi-devel libapr-devel libevent-devel
-	sudo yum -y install perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch
-	sudo yum -y install apr-util-devel libxml2-devel libxslt-devel
-	sudo yum -y install wget zip unzip
-	curl https://bootstrap.pypa.io/get-pip.py | sudo python
-	sudo pip install --upgrade setuptools wheel paramiko pip lockfile epydoc psutil
+set -exo pipefail
+base_path=\${1}
+source /opt/gcc_env.sh
+cd /tmp/
+sudo yum -y install git gcc readline-devel zlib-devel libcurl-devel bzip2-devel bison flex gcc-c++ python-devel openssl-devel libffi-devel libapr-devel libevent-devel
+sudo yum -y install perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch
+sudo yum -y install apr-util-devel libxml2-devel libxslt-devel
+sudo yum -y install wget zip unzip
+curl https://bootstrap.pypa.io/get-pip.py | sudo python
+sudo pip install --upgrade setuptools wheel paramiko pip lockfile epydoc psutil
 
-	wget https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz
-	tar -xzvf libevent-2.1.8-stable.tar.gz
-	cd libevent-2.1.8-stable
-	./configure --prefix=/usr --disable-static
-	make
-	sudo make install
+wget https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz
+tar -xzvf libevent-2.1.8-stable.tar.gz
+cd libevent-2.1.8-stable
+./configure --prefix=/usr --disable-static
+make
+sudo make install
 
-	cd \${base_path}/gpdb_src
-	./configure --with-openssl --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --disable-orca
-	make
-	sudo make install
-	echo HERE1
-	source /tmp/gpdb-deploy/greenplum_path.sh
-	which psql
-	sudo mkdir /tmp/gpdb-data
-	# export GPDATA=/tmp/gpdb-data
-	export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
-	echo $MASTER_DATA_DIRECTORY
-	pwd
-	sudo mkdir -p /tmp/gpdb-data/master
-	sudo mkdir -p /tmp/gpdb-data/p0/primary
-	sudo hostname > /tmp/gpdb-data/hosts
+cd \${base_path}/gpdb_src
+./configure --with-openssl --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --disable-orca
+make
+sudo make install
+echo HERE1
+more greenplum_path.sh
+source /tmp/gpdb-deploy/greenplum_path.sh
+which psql
+sudo mkdir /tmp/gpdb-data
+# export GPDATA=/tmp/gpdb-data
+export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
+echo $MASTER_DATA_DIRECTORY
+pwd
+sudo mkdir -p /tmp/gpdb-data/master
+sudo mkdir -p /tmp/gpdb-data/p0/primary
+sudo hostname > /tmp/gpdb-data/hosts
 
-	echo HERE2
-	echo /tmp/gpdb-data
-	ls /tmp/gpdb-data
-	# gpssh-exkeys -f /tmp/gpdb-data/hosts
-	HN=$HOSTNAME
- 	cp $GPHOME/docs/cli_help/gpconfigs/gpinitsystem_config  /tmp/gpdb-data
+echo HERE2
+echo /tmp/gpdb-data
+ls /tmp/gpdb-data
+# gpssh-exkeys -f /tmp/gpdb-data/hosts
+HN=$HOSTNAME
+cp /tmp/gpdb-deploy/docs/cli_help/gpconfigs/gpinitsystem_config  /tmp/gpdb-data
 
- 	sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=${HN}" \
-    -e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=(/tmp/gpdb-data/p0/primary)" \
-    -e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=/tmp/gpdb-data/master" \
-    -e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts"
-    --in-place=.orig /tmp/gpdb-data/gpinitsystem_config
+sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=${HN}" \
+-e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=(/tmp/gpdb-data/p0/primary)" \
+-e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=/tmp/gpdb-data/master" \
+-e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts"
+--in-place=.orig /tmp/gpdb-data/gpinitsystem_config
 
-    su gpadmin gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
-    gpstart -a
+su gpadmin gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
+gpstart -a
 
 	EOF
 
