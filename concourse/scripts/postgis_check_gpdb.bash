@@ -5,6 +5,58 @@ set -eox pipefail
 CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${CWDIR}/common.bash"
 
+function compile_gpdb(){
+
+  cat > /opt/compile_gpdb.sh <<-EOF
+
+  	base_path=\${1}
+  	source /opt/gcc_env.sh
+	cd /tmp/
+	sudo yum -y install git gcc readline-devel zlib-devel libcurl-devel bzip2-devel bison flex gcc-c++ python-devel openssl-devel libffi-devel libapr-devel libevent-devel
+	sudo yum -y install perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch
+	sudo yum -y install apr-util-devel libxml2-devel libxslt-devel
+	sudo yum -y install wget zip unzip
+	curl https://bootstrap.pypa.io/get-pip.py | sudo python
+	sudo pip install --upgrade setuptools wheel paramiko pip lockfile epydoc psutil
+
+	wget https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz
+	tar -xzvf libevent-2.1.8-stable.tar.gz
+	cd libevent-2.1.8-stable
+	./configure --prefix=/usr --disable-static
+	make
+	sudo make install
+
+	cd \${base_path}/gpdb_src
+	./configure --with-openssl --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --disable-orca
+	make
+	sudo make install
+
+	source /tmp/gpdb-deploy/greenplum_path.sh
+	mkdir /tmp/gpdb-data
+	export GPDATA=/tmp/gpdb-data
+	export MASTER_DATA_DIRECTORY=$GPDATA/master/gpseg-1
+	mkdir -p $GPDATA/master
+	mkdir -p $GPDATA/p0/primary
+	hostname > $GPDATA/hosts
+	gpssh-exkeys -f $GPDATA/hosts
+	HN=$HOSTNAME
+ 	cp $GPHOME/docs/cli_help/gpconfigs/gpinitsystem_config  $GPDATA
+
+ 	sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=${HN}" \
+    -e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=($GPDATA/p0/primary)" \
+    -e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=$GPDATA/master" \
+    -e "/#MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=$GPDATA/hosts"
+    --in-place=.orig $GPDATA/gpinitsystem_config
+
+    gpinitsystem -c $GPDATA/gpinitsystem_config
+    gpstart -a
+
+	EOF
+
+	chmod a+x /opt/compile_gpdb.sh
+}
+
+
 function gen_env(){
   cat > /opt/run_test.sh <<-EOF
 		trap look4results ERR
@@ -116,12 +168,14 @@ psql template1 -f raster_comments.sql
 
 function _main() {
 
-    configure
-    install_gpdb
-    setup_gpadmin_user
-    make_cluster
-    gen_env
-    setup_postgis
+	compile_gpdb
+
+    # configure
+    # install_gpdb
+    # setup_gpadmin_user
+    # make_cluster
+    # gen_env
+    # setup_postgis
     run_test
 }
 
