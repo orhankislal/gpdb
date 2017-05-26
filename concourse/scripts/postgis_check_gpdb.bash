@@ -51,7 +51,7 @@ ls /tmp/gpdb-data
 HN=$HOSTNAME
 cp /tmp/gpdb-deploy/docs/cli_help/gpconfigs/gpinitsystem_config  /tmp/gpdb-data
 
-sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=${HN}" \
+sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=\${HN}" \
 -e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=(/tmp/gpdb-data/p0/primary)" \
 -e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=/tmp/gpdb-data/master" \
 -e "/MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts" \
@@ -177,11 +177,13 @@ psql template1 -f raster_comments.sql
 function init_db(){
 
 	cat > /opt/init_db.sh <<-EOF
+	set -exo pipefail
 	source /tmp/gpdb-deploy/greenplum_path.sh
 	source /opt/gcc_env.sh
 	export GPDATA=/tmp/gpdb-data
 	export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
 	gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
+	echo HERE4
 	gpstart -a
 	EOF
 
