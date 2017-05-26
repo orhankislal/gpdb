@@ -33,6 +33,8 @@ function gen_env(){
 		source /opt/gcc_env.sh
 		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 
+		ls \${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/
+
 
 		# cd \${base_path}/gpdb_src/gpMgmt/bin
 		# make check
@@ -51,9 +53,9 @@ function setup_gpadmin_user() {
 function setup_postgis() {
  	cat > /opt/setup_postgis.sh <<-EOF
 base_path=\${1}
-source /usr/local/greenplum-db-devel/greenplum_path.sh
-source /opt/gcc_env.sh
-source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
+# source /usr/local/greenplum-db-devel/greenplum_path.sh
+# source /opt/gcc_env.sh
+# source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 # export MASTER_DATA_DIRECTORY=\${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
 
 cd /tmp/
