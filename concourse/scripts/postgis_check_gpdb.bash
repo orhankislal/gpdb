@@ -190,12 +190,13 @@ function _main() {
 
     # configure
     # install_gpdb
+    run_test1
     setup_gpadmin_user
     init_db
     # make_cluster
     # gen_env
     # setup_postgis
-    run_test
+    run_test2
 }
 
 _main "$@"
