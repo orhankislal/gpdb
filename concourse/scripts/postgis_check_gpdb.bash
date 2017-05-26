@@ -117,7 +117,7 @@ function _main() {
     make_cluster
     gen_env
     setup_postgis
-    run_test
+    # run_test
 }
 
 _main "$@"
