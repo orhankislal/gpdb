@@ -182,6 +182,8 @@ function init_db(){
 	source /opt/gcc_env.sh
 	export GPDATA=/tmp/gpdb-data
 	export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
+	gpssh-exkeys -f /tmp/gpdb-data/hosts
+
 	gpinitsystem -c /tmp/gpdb-data/gpinitsystem_config
 	echo HERE4
 	gpstart -a
