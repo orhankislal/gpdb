@@ -120,9 +120,9 @@ source /opt/gcc_env.sh
 source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 # export MASTER_DATA_DIRECTORY=\${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
 
-cd /tmp/
-wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
-sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
+# cd /tmp/
+# wget ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
+# sudo yum install json-c-devel-0.11-4.el7_0.x86_64.rpm
 sudo yum install -y libxml2-devel
 sudo yum install -y geos-devel
 sudo yum install -y proj-devel
