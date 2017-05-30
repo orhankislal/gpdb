@@ -38,13 +38,7 @@ transfer_ownership() {
   [ -d /usr/local/greenplum-db-devel ] && chown -R gpadmin:gpadmin /usr/local/greenplum-db-devel
   chown -R gpadmin:gpadmin /home/gpadmin
 }
-transfer_ownership_for_postgis() {
-  chown -R gpadmin:gpadmin postgis_src
-  chown -R gpadmin:gpadmin gpdb_src
-  chown -R gpadmin:gpadmin /home/gpadmin
-  chown -R gpadmin:gpadmin /tmp/gpdb-deploy
-  # chown -R gpadmin:gpadmin /tmp/gpdb-data
-}
+
 set_limits() {
   # Currently same as what's recommended in install guide
   if [ -d /etc/security/limits.d ]; then
@@ -72,7 +66,7 @@ setup_gpadmin_user() {
   esac
   echo -e "password\npassword" | passwd gpadmin
   setup_ssh_for_user gpadmin
-  transfer_ownership_for_postgis
+  transfer_ownership
   set_limits
 }
 
