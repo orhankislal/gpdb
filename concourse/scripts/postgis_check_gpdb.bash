@@ -146,6 +146,8 @@ cd build/postgis-2.1.5/
 make
 make install
 
+mv \${base_path}/postgis_src/postgis/build/postgis-2.1.5/regress/loader \${base_path}/postgis_src/postgis/build/postgis-2.1.5/regress/bkp_loader
+
 chown -R gpadmin:gpadmin \${base_path}/postgis_src
 	EOF
 
