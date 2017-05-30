@@ -28,7 +28,7 @@ make
 sudo make install
 
 cd \${base_path}/gpdb_src
-./configure --with-openssl --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --disable-orca
+./configure --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --disable-orca
 make
 sudo make install
 echo HERE1
