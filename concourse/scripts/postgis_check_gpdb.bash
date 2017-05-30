@@ -115,7 +115,7 @@ function setup_postgis() {
  	cat > /opt/setup_postgis.sh <<-EOF
 	set -exo pipefail
 base_path=\${1}
-source /usr/local/greenplum-db-devel/greenplum_path.sh
+source /tmp/gpdb-deploy/greenplum_path.sh
 source /opt/gcc_env.sh
 source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 # export MASTER_DATA_DIRECTORY=\${base_path}/gpdb_src/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
