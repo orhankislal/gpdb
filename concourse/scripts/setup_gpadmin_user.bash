@@ -43,7 +43,7 @@ transfer_ownership_for_postgis() {
   chown -R gpadmin:gpadmin gpdb_src
   chown -R gpadmin:gpadmin /home/gpadmin
   chown -R gpadmin:gpadmin /tmp/gpdb-deploy
-  chown -R gpadmin:gpadmin /tmp/gpdb-data
+  # chown -R gpadmin:gpadmin /tmp/gpdb-data
 }
 set_limits() {
   # Currently same as what's recommended in install guide
