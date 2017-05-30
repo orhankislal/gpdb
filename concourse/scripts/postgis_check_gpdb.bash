@@ -32,32 +32,33 @@ cd \${base_path}/gpdb_src
 make
 sudo make install
 echo HERE1
-# more /tmp/gpdb-deploy/greenplum_path.sh
-source /tmp/gpdb-deploy/greenplum_path.sh
-which psql
-sudo mkdir /tmp/gpdb-data
-# export GPDATA=/tmp/gpdb-data
-export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
-echo \$MASTER_DATA_DIRECTORY
-pwd
-sudo mkdir -p /tmp/gpdb-data/master
-sudo mkdir -p /tmp/gpdb-data/p0/primary
-sudo hostname > /tmp/gpdb-data/hosts
+cd \${base_path}
+# # more /tmp/gpdb-deploy/greenplum_path.sh
+# source /tmp/gpdb-deploy/greenplum_path.sh
+# which psql
+# sudo mkdir /tmp/gpdb-data
+# # export GPDATA=/tmp/gpdb-data
+# export MASTER_DATA_DIRECTORY=/tmp/gpdb-data/master/gpseg-1
+# echo \$MASTER_DATA_DIRECTORY
+# pwd
+# sudo mkdir -p /tmp/gpdb-data/master
+# sudo mkdir -p /tmp/gpdb-data/p0/primary
+# sudo hostname > /tmp/gpdb-data/hosts
 
-echo HERE2
-echo /tmp/gpdb-data
-ls /tmp/gpdb-data
-# gpssh-exkeys -f /tmp/gpdb-data/hosts
-HN=$HOSTNAME
-cp /tmp/gpdb-deploy/docs/cli_help/gpconfigs/gpinitsystem_config  /tmp/gpdb-data
+# echo HERE2
+# echo /tmp/gpdb-data
+# ls /tmp/gpdb-data
+# # gpssh-exkeys -f /tmp/gpdb-data/hosts
+# HN=$HOSTNAME
+# cp /tmp/gpdb-deploy/docs/cli_help/gpconfigs/gpinitsystem_config  /tmp/gpdb-data
 
-sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=\${HN}" \
--e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=(/tmp/gpdb-data/p0/primary)" \
--e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=/tmp/gpdb-data/master" \
--e "/MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts" \
---in-place=.orig /tmp/gpdb-data/gpinitsystem_config
+# sed -e "/MASTER_HOSTNAME/c\MASTER_HOSTNAME=\${HN}" \
+# -e "/DATA_DIRECTORY/c\declare -a DATA_DIRECTORY=(/tmp/gpdb-data/p0/primary)" \
+# -e "/MASTER_DIRECTORY/c\MASTER_DIRECTORY=/tmp/gpdb-data/master" \
+# -e "/MACHINE_LIST_FILE/c\MACHINE_LIST_FILE=/tmp/gpdb-data/hosts" \
+# --in-place=.orig /tmp/gpdb-data/gpinitsystem_config
 
-echo HERE3
+# echo HERE3
 
 	EOF
 
@@ -136,7 +137,7 @@ make
 sudo make install
 export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
-# chown -R gpadmin:gpadmin \${base_path}/postgis_src
+chown -R gpadmin:gpadmin \${base_path}/postgis_src
 	EOF
 
 	cat > /opt/install_postgis.sh <<-EOF
@@ -145,18 +146,19 @@ source /usr/local/greenplum-db-devel/greenplum_path.sh
 source /opt/gcc_env.sh
 source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 cd \${base_path}/postgis_src/postgis/build/postgis-2.1.5/
-export TEMP1 = $LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
+# export TEMP1 = $LD_LIBRARY_PATH
+# export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
 cd \${base_path}/postgis_src/postgis/
 make remove
 make prepare
 cd build/postgis-2.1.5/
-./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME --libdir=/usr/lib64
+./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME
+# --libdir=/usr/lib64
 make
 make install
 
-export LD_LIBRARY_PATH=$TEMP1
+# export LD_LIBRARY_PATH=$TEMP1
 make check
 
 gpstate -a
@@ -200,10 +202,10 @@ function _main() {
     # install_gpdb
     run_test1
     setup_gpadmin_user
-    init_db
-    # make_cluster
+    # init_db
+    make_cluster
     # gen_env
-    # setup_postgis
+    setup_postgis
     run_test2
 }
 
