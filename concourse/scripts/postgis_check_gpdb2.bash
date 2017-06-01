@@ -151,10 +151,15 @@ transfer_ownership_for_postgis() {
 }
 
 function make_cluster() {
+  set -exo pipefail
   source /tmp/gpdb-deploy/greenplum_path.sh
+  # source /opt/gcc_env.sh
   export BLDWRAP_POSTGRES_CONF_ADDONS=${BLDWRAP_POSTGRES_CONF_ADDONS}
   export LDFLAGS='-L/usr/local/lib/'
-  export LD_LIBRARY_PATH=/usr/local/lib/:\$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+  # ldconfig
+  ldconfig -p | grep libgpopt
+  echo $LD_LIBRARY_PATH
   # Currently, the max_concurrency tests in src/test/isolation2
   # require max_connections of at least 129.
   export DEFAULT_QD_MAX_CONNECT=150
