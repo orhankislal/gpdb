@@ -158,8 +158,8 @@ function make_cluster() {
   export LDFLAGS='-L/usr/local/lib/'
   export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
   # ldconfig
-  ldconfig -p | grep libgpopt
-  echo $LD_LIBRARY_PATH
+  # ldconfig -p | grep libgpopt
+  # echo $LD_LIBRARY_PATH
   # Currently, the max_concurrency tests in src/test/isolation2
   # require max_connections of at least 129.
   export DEFAULT_QD_MAX_CONNECT=150
