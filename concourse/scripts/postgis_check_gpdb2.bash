@@ -61,7 +61,7 @@ function prep_compile_gpdb(){
         cd /tmp/
         sudo rm master.zip
 
-		source /opt/gcc_env.sh
+		# source /opt/gcc_env.sh
 		cd \${base_path}/gpdb_src
 		./configure --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --enable-orca
 		make
