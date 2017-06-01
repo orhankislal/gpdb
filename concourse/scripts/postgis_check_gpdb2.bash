@@ -11,7 +11,6 @@ function prep_compile_gpdb(){
 
 		set -exo pipefail
 		base_path=\${1}
-		source /opt/gcc_env.sh
 		cd /tmp/
 		sudo yum -y install git gcc readline-devel zlib-devel libcurl-devel bzip2-devel bison flex gcc-c++ python-devel openssl-devel libffi-devel libapr-devel libevent-devel
 		sudo yum -y install perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch
@@ -63,6 +62,7 @@ function prep_compile_gpdb(){
         cd /tmp/
         sudo rm master.zip
 
+		source /opt/gcc_env.sh
 		cd \${base_path}/gpdb_src
 		./configure --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --enable-orca
 		make
