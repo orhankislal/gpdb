@@ -33,7 +33,6 @@ function prep_compile_gpdb(){
         export CMAKE_HOME=\$(pwd)
 
 		cd /tmp/
-        sudo yum install -y zip unzip
         wget https://github.com/greenplum-db/gp-xerces/archive/master.zip
         sudo unzip master.zip
         cd gp-xerces-master
@@ -56,13 +55,17 @@ function prep_compile_gpdb(){
         cd gporca-master/
         mkdir build
         cd build
-        \$CMAKE_HOME/cmake ../
+        /tmp/cmake-3.8.1-Linux-x86_64/bin/cmake ../
         make
         sudo make install
         cd /tmp/
         sudo rm master.zip
 
 		source /opt/gcc_env.sh
+		echo $LDFLAGS
+        export LDFLAGS='-L/usr/local/lib/'
+        export LD_LIBRARY_PATH=/usr/local/lib/:\$LD_LIBRARY_PATH
+        echo $LD_LIBRARY_PATH
 		cd \${base_path}/gpdb_src
 		./configure --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --enable-orca
 		make
