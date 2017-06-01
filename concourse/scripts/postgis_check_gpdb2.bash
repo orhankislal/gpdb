@@ -44,8 +44,8 @@ function prep_compile_gpdb(){
         sudo make install
         export LDFLAGS='-L/usr/local/lib/'
         export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
-        sudo rm master.zip
         cd /tmp/
+        sudo rm master.zip
 
         sudo touch /etc/ld.so.conf.d/test1.conf
         sudo echo "/usr/local/lib" >> /etc/ld.so.conf.d/test1.conf
@@ -60,9 +60,10 @@ function prep_compile_gpdb(){
         make
         sudo make install
         cd /tmp/
+        sudo rm master.zip
 
 		cd \${base_path}/gpdb_src
-		./configure --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --disable-orca
+		./configure --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --enable-orca
 		make
 		sudo make install
 		cd \${base_path}
