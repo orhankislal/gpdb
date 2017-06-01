@@ -33,6 +33,7 @@ function prep_compile_gpdb(){
         cd cmake-3.8.1-Linux-x86_64/bin
         export CMAKE_HOME=$(pwd)
 
+		cd /tmp/
         sudo yum install -y zip unzip
         wget https://github.com/greenplum-db/gp-xerces/archive/master.zip
         sudo unzip master.zip
