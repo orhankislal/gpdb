@@ -157,7 +157,7 @@ function make_cluster() {
   export BLDWRAP_POSTGRES_CONF_ADDONS=${BLDWRAP_POSTGRES_CONF_ADDONS}
   export LDFLAGS='-L/usr/local/lib/'
   export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
-  # ldconfig
+  ldconfig
   # ldconfig -p | grep libgpopt
   # echo $LD_LIBRARY_PATH
   # Currently, the max_concurrency tests in src/test/isolation2
