@@ -77,29 +77,27 @@ function prep_setup_postgis() {
 
 
 function prep_build_gppkg() {
-	cat > /opt/build_gppkg.sh <<-EOF
-		set -exo pipefail
-		base_path=\${1}
-		source /tmp/gpdb-deploy/greenplum_path.sh
-		source /opt/gcc_env.sh
 
-		cd \${base_path}/gpdb_src/gpAux
-		make sync_tools [BLD_ARCH="rhel7_x86_64"]
+	set -exo pipefail
+	bb=`pwd`
+	source /tmp/gpdb-deploy/greenplum_path.sh
+	source /opt/gcc_env.sh
 
+	pushd gpdb_src/gpAux
+	make sync_tools [BLD_ARCH="rhel7_x86_64"]
+	pushd ../../postgis_src/postgis/package
 
-		cd \${base_path}/postgis_src/postgis/package
-		make \
-			BLD_TARGETS="gppkg" \
-			BLD_ARCH="rhel7_x86_64" \
-			INSTLOC=$GPHOME \
-			BLD_TOP="\${base_path}/gpdb_src/gpAux" \
-			POSTGIS_DIR="\${base_path}/postgis_src/postgis/build/postgis-2.1.5" \
-			gppkg
+	make \
+		BLD_TARGETS="gppkg" \
+		BLD_ARCH="rhel7_x86_64" \
+		INSTLOC=$GPHOME \
+		BLD_TOP="$bb/gpdb_src/gpAux" \
+		POSTGIS_DIR="$bb/postgis_src/postgis/build/postgis-2.1.5" \
+		gppkg
+	popd
+	popd
 
-	EOF
-	chmod a+x /opt/build_gppkg.sh
 }
-
 
 transfer_ownership_for_postgis() {
   chown -R gpadmin:gpadmin postgis_src
