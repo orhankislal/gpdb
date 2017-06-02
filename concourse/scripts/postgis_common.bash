@@ -85,6 +85,7 @@ function prep_test_postgis_gppkg() {
 		gppkg -q postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
 		gppkg -i postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
 		gppkg -q postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
+		cd \${base_path}
 	EOF
 
 	chmod a+x /opt/test_postgis_gppkg.sh
