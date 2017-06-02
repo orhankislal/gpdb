@@ -41,11 +41,11 @@ function prep_compile_gpdb(){
 
 
 function setup_gpadmin_user() {
-    ./gpdb_src/concourse/scripts/setup_gpadmin_user.bash "$TEST_OS"
+	./gpdb_src/concourse/scripts/setup_gpadmin_user.bash "$TEST_OS"
 }
 
 function prep_setup_postgis() {
- 	cat > /opt/setup_postgis.sh <<-EOF
+	cat > /opt/setup_postgis.sh <<-EOF
 		set -exo pipefail
 		base_path=\${1}
 		source /tmp/gpdb-deploy/greenplum_path.sh
@@ -110,6 +110,31 @@ function prep_setup_postgis() {
 }
 
 
+function prep_build_gppkg() {
+	cat > /opt/build_gppkg.sh <<-EOF
+		set -exo pipefail
+		base_path=\${1}
+		source /tmp/gpdb-deploy/greenplum_path.sh
+		source /opt/gcc_env.sh
+
+		cd \${base_path}/gpdb_src/gpAux
+		make sync_tools [BLD_ARCH="rhel7_x86_64"]
+
+
+		cd \${base_path}/postgis_src/postgis/package
+		make \
+			BLD_TARGETS="gppkg" \
+			BLD_ARCH="rhel7_x86_64" \
+			INSTLOC=$GPHOME \
+			BLD_TOP="\${base_path}/gpdb_src/gpAux" \
+			POSTGIS_DIR="\${base_path}/postgis_src/postgis/build/postgis-2.1.5" \
+			gppkg
+
+	EOF
+	chmod a+x /opt/build_gppkg.sh
+}
+
+
 transfer_ownership_for_postgis() {
   chown -R gpadmin:gpadmin postgis_src
   [ -d /tmp/gpdb-deploy ] && chown -R gpadmin:gpadmin /tmp/gpdb-deploy
@@ -123,7 +148,7 @@ function make_cluster() {
   export DEFAULT_QD_MAX_CONNECT=150
   workaround_before_concourse_stops_stripping_suid_bits
   pushd gpdb_src/gpAux/gpdemo
-      su gpadmin -c make cluster
+	  su gpadmin -c make cluster
   popd
 }
 
@@ -135,13 +160,16 @@ function _main() {
 	ln -s "$(pwd)/gpdb_src/gpAux/ext/rhel6_x86_64/python-2.7.12" /opt
 	su - root -c "bash /opt/compile_gpdb.sh $(pwd)"
 
-    setup_gpadmin_user
+	setup_gpadmin_user
 	transfer_ownership_for_postgis
-    make_cluster
-    prep_setup_postgis
+	make_cluster
+	prep_setup_postgis
 
 	su - root -c "bash /opt/setup_postgis.sh $(pwd)"
 	su - gpadmin -c "bash /opt/install_postgis.sh $(pwd)"
+
+	prep_build_gppkg
+	su - root -c "bash /opt/build_gppkg.sh $(pwd)"
 }
 
 _main "$@"
