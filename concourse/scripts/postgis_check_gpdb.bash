@@ -66,6 +66,8 @@ function _main() {
 
 	su - root -c "bash /opt/setup_postgis.sh $(pwd)"
 	su - gpadmin -c "bash /opt/install_postgis.sh $(pwd)"
+
+	prep_build_gppkg
 }
 
 _main "$@"
