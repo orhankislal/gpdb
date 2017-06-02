@@ -75,11 +75,25 @@ function prep_setup_postgis() {
 	chmod a+x /opt/install_postgis.sh
 }
 
+function prep_test_postgis_gppkg() {
+	cat > /opt/test_postgis_gppkg.sh <<-EOF
+		set -exo pipefail
+		base_path=\${1}
+		source /tmp/gpdb-deploy/greenplum_path.sh
+		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
+		cd \${base_path}/postgis_src/postgis/package
+		gppkg -q postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
+		gppkg -i postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
+		gppkg -q postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
+	EOF
 
-function prep_build_gppkg() {
+	chmod a+x /opt/test_postgis_gppkg.sh
+}
+
+function build_gppkg() {
 
 	set -exo pipefail
-	bb=`pwd`
+	base_path=`pwd`
 	source /tmp/gpdb-deploy/greenplum_path.sh
 	source /opt/gcc_env.sh
 
@@ -91,13 +105,17 @@ function prep_build_gppkg() {
 		BLD_TARGETS="gppkg" \
 		BLD_ARCH="rhel7_x86_64" \
 		INSTLOC=$GPHOME \
-		BLD_TOP="$bb/gpdb_src/gpAux" \
-		POSTGIS_DIR="$bb/postgis_src/postgis/build/postgis-2.1.5" \
+		BLD_TOP="$base_path/gpdb_src/gpAux" \
+		POSTGIS_DIR="$base_path/postgis_src/postgis/build/postgis-2.1.5" \
 		gppkg
 	popd
 	popd
 
+	prep_test_postgis_gppkg
+	su - gpadmin -c "bash /opt/test_postgis_gppkg.sh $(pwd)"
+
 }
+
 
 transfer_ownership_for_postgis() {
   chown -R gpadmin:gpadmin postgis_src
