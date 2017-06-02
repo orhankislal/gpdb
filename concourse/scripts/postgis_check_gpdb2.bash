@@ -3,8 +3,7 @@
 set -eox pipefail
 
 CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "${CWDIR}/common.bash"
-source "${CWDIR}/postgis_check_gpdb.bash"
+source "${CWDIR}/postgis_common.bash"
 
 function prep_compile_gpdb(){
 
@@ -106,6 +105,9 @@ function _main() {
 
 	su - root -c "bash /opt/setup_postgis.sh $(pwd)"
 	su - gpadmin -c "bash /opt/install_postgis.sh $(pwd)"
+
+	prep_build_gppkg
+	su - root -c "bash /opt/build_gppkg.sh $(pwd)"
 }
 
 _main "$@"
