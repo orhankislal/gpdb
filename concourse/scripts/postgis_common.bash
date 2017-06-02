@@ -115,6 +115,8 @@ function build_gppkg() {
 	prep_test_postgis_gppkg
 	su - gpadmin -c "bash /opt/test_postgis_gppkg.sh $(pwd)"
 
+	cp ./postgis_src/postgis/package/postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg ./postgis_gppkg/
+
 }
 
 
