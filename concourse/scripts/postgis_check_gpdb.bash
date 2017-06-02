@@ -72,8 +72,8 @@ function prep_setup_postgis() {
 		# export LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH
 
 		cd \${base_path}/postgis_src/postgis/
-		make remove
-		make prepare
+		# make remove
+		# make prepare
 		cd build/postgis-2.1.5/
 		./configure --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --prefix=$GPHOME --libdir=/usr/lib64
 		make
