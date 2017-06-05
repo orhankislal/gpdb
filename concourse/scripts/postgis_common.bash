@@ -117,6 +117,7 @@ function build_gppkg() {
 
 	cp ./postgis_src/postgis/package/postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg /tmp/
 	cp ./postgis_src/postgis/package/postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg ./postgis_gppkg/
+	cp ./postgis_src/postgis/package/postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg ./
 	pwd
 	pushd ./postgis_src/postgis/package/
 	pwd
