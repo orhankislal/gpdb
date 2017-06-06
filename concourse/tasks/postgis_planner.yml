@@ -1,0 +1,11 @@
+platform: linux
+image_resource:
+  type: docker-image
+inputs:
+  - name: gpdb_src
+  # - name: bin_gpdb
+  - name: postgis_src
+params:
+  TEST_OS: ""
+run:
+  path: gpdb_src/concourse/scripts/postgis_planner.bash
