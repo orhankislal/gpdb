@@ -58,16 +58,16 @@ function prep_setup_postgis() {
 		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
 		cd \${base_path}/postgis_src/postgis/build/postgis-2.1.5/
 
-		make check
+		# make check
 
-		gpstate -a
+		# gpstate -a
 
-		cd $GPHOME/share/postgresql/contrib/postgis-2.1
-		psql template1 -f postgis.sql > /dev/null
-		psql template1 -f postgis_comments.sql > /dev/null
-		psql template1 -f spatial_ref_sys.sql > /dev/null
-		psql template1 -f rtpostgis.sql > /dev/null
-		psql template1 -f raster_comments.sql > /dev/null
+		# cd $GPHOME/share/postgresql/contrib/postgis-2.1
+		# psql template1 -f postgis.sql > /dev/null
+		# psql template1 -f postgis_comments.sql > /dev/null
+		# psql template1 -f spatial_ref_sys.sql > /dev/null
+		# psql template1 -f rtpostgis.sql > /dev/null
+		# psql template1 -f raster_comments.sql > /dev/null
 
 	EOF
 

@@ -5,6 +5,8 @@ inputs:
   - name: gpdb_src
   # - name: bin_gpdb
   - name: postgis_src
+outputs:
+  - name: postgis_gppkg
 params:
   TEST_OS: ""
 run:
