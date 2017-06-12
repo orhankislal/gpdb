@@ -47,7 +47,7 @@ function prep_setup_postgis() {
 
 		mv \${base_path}/postgis_src/postgis/build/postgis-2.1.5/regress/loader \${base_path}/postgis_src/postgis/build/postgis-2.1.5/regress/bkp_loader
 
-		chown -R gpadmin:gpadmin \${base_path}/postgis_src
+		# chown -R gpadmin:gpadmin \${base_path}/postgis_src
 	EOF
 
 	cat > /opt/install_postgis.sh <<-EOF
@@ -64,6 +64,9 @@ function prep_setup_postgis() {
 
 		# cd $GPHOME/share/postgresql/contrib/postgis-2.1
 		# psql template1 -f postgis.sql > /dev/null
+		# psql template1 -f legacy.sql > /dev/null
+		# psql template1 -f postgis_upgrade_20_21.sql > /dev/null
+		# psql template1 -f postgis_upgrade_21_minor.sql > /dev/null
 		# psql template1 -f postgis_comments.sql > /dev/null
 		# psql template1 -f spatial_ref_sys.sql > /dev/null
 		# psql template1 -f rtpostgis.sql > /dev/null
@@ -112,8 +115,8 @@ function build_gppkg() {
 	popd
 	popd
 
-	prep_test_postgis_gppkg
-	su - gpadmin -c "bash /opt/test_postgis_gppkg.sh $(pwd)"
+	# prep_test_postgis_gppkg
+	# su - gpadmin -c "bash /opt/test_postgis_gppkg.sh $(pwd)"
 
 	cp ./postgis_src/postgis/package/postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg ./postgis_gppkg/
 

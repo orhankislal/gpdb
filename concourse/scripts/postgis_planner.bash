@@ -67,7 +67,7 @@ function _main() {
 	su - gpadmin -c "bash /opt/install_postgis.sh $(pwd)"
 
 	build_gppkg
-	exit 1
+
 }
 
 _main "$@"
