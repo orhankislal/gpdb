@@ -63,11 +63,11 @@ function prep_compile_gpdb(){
 
 		cd \${base_path}/gpdb_src
 
-        git checkout -b tmp1
-        git remote add gpdb git@github.com:greenplum-db/gpdb.git
-        git fetch gpdb
-        git checkout -t gpdb/master
-        git merge --squash pipeline
+        # git checkout -b tmp1
+        # git remote add gpdb https://github.com/greenplum-db/gpdb.git
+        # git fetch gpdb
+        # git checkout -t gpdb/master
+        # git merge --squash pipeline
 
 		./configure --with-libxml --with-libxslt --with-python --with-perl --prefix=/tmp/gpdb-deploy --enable-orca
 		make
