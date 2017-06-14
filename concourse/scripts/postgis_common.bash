@@ -60,8 +60,6 @@ function prep_setup_postgis() {
 
 		# make check
 
-		# gpstate -a
-
 		# cd $GPHOME/share/postgresql/contrib/postgis-2.1
 		# psql template1 -f postgis.sql > /dev/null
 		# psql template1 -f legacy.sql > /dev/null
@@ -76,22 +74,6 @@ function prep_setup_postgis() {
 
 	chmod a+x /opt/setup_postgis.sh
 	chmod a+x /opt/install_postgis.sh
-}
-
-function prep_test_postgis_gppkg() {
-	cat > /opt/test_postgis_gppkg.sh <<-EOF
-		set -exo pipefail
-		base_path=\${1}
-		source /tmp/gpdb-deploy/greenplum_path.sh
-		source \${base_path}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
-		cd \${base_path}/postgis_src/postgis/package
-		gppkg -q postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
-		gppkg -i postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
-		gppkg -q postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg
-		cd \${base_path}
-	EOF
-
-	chmod a+x /opt/test_postgis_gppkg.sh
 }
 
 function build_gppkg() {
@@ -114,9 +96,6 @@ function build_gppkg() {
 		gppkg
 	popd
 	popd
-
-	# prep_test_postgis_gppkg
-	# su - gpadmin -c "bash /opt/test_postgis_gppkg.sh $(pwd)"
 
 	cp ./postgis_src/postgis/package/postgis-ossv2.1.5_pv2.1_gpdb5.0-rhel7-x86_64.gppkg ./postgis_gppkg/
 
